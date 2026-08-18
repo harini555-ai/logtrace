@@ -1,18 +1,6 @@
-export default defineConfig({
-  plugins: [react()],
-  define: {
-    global: "window",
+﻿export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:8081",
-        changeOrigin: true,
-      },
-      "/ws": {
-        target: "http://localhost:8081",
-        ws: true,
-      },
-    },
-  },
-});
+}
