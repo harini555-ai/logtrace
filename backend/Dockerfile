@@ -22,7 +22,8 @@ WORKDIR /app
 
 RUN addgroup -S logtrace && adduser -S logtrace -G logtrace
 
-COPY --from=build /build/target/logtrace-backend.jar app.jar
+# Wildcard *.jar use seivadhil snapshot version issue varaadhu
+COPY --from=build /build/target/*.jar app.jar
 
 RUN chown -R logtrace:logtrace /app
 USER logtrace
