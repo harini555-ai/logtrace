@@ -1,63 +1,120 @@
-# LogTrace
+# ⚡ LogTrace
 
-Distributed Log Aggregator & Real-Time Monitoring Platform.
 
-Client microservices push structured application logs (INFO/WARN/ERROR/DEBUG) to
-the **Spring Boot** backend via a REST ingestion endpoint. Logs are persisted to
-MySQL (Aiven-compatible, SSL) and instantly broadcast over **STOMP/WebSocket**
-to a **React (Vite) + Tailwind** dark-mode dashboard for live tailing, filtering,
-search, and analytics.
+> Real-Time Distributed Log Aggregator & Observability Platform
 
-```
+
+LogTrace is a full-stack log monitoring platform built for distributed microservices. It allows services to securely send logs, stores them in MySQL, and displays them in real time on a React dashboard using WebSocket and STOMP.
+
+
+## 🚀 Features
+
+
+- Real-time log streaming
+- Microservice registration
+- API key authentication
+- Log ingestion through REST API
+- Search and filter logs
+- Service-wise log monitoring
+- Error, warning, info, and debug logs
+- Real-time analytics dashboard
+- MySQL database
+- Docker support
+- Cloud deployment ready
+
+
+## 🛠️ Tech Stack
+
+
+- **Backend:** Java 17, Spring Boot 3, Spring Data JPA
+- **Frontend:** React 18, Vite, Tailwind CSS
+- **Real-Time:** WebSocket, STOMP
+- **Database:** MySQL 8
+- **DevOps:** Docker, Docker Compose
+- **Deployment:** Render, Vercel, Aiven
+
+
+## 📂 Project Structure
+
+
+```text
 logtrace/
-├── backend/     # Spring Boot 3 / Java 17 REST + WebSocket API
-├── frontend/    # React (Vite) dashboard
-└── docker-compose.yml
-```
+├── backend/
+│   ├── src/
+│   ├── Dockerfile
+│   └── pom.xml
+│
+├── frontend/
+│   ├── src/
+│   ├── Dockerfile
+│   └── package.json
+│
+├── docker-compose.yml
+└── README.md
 
-## Quick start (local, no Docker)
+⚡ How It Works
+Microservice
+     ↓
+REST API + API Key
+     ↓
+Spring Boot Backend
+     ↓
+MySQL Database
+     ↓
+WebSocket / STOMP
+     ↓
+React Dashboard
 
-**1. Backend**
-```bash
-cd backend
-export DB_HOST=your-aiven-host DB_PORT=... DB_NAME=logtrace DB_USER=avnadmin DB_PASSWORD=...
-mvn spring-boot:run
-```
+🔌 API Usage
+Register Service
+curl -X POST http://localhost:8080/api/services \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "payment-service",
+    "environment": "PRODUCTION"
+  }'
+Send Log
+curl -X POST http://localhost:8080/api/logs/ingest \
+  -H "Content-Type: application/json" \
+  -H "X-API-KEY: YOUR_API_KEY" \
+  -d '{
+    "level": "ERROR",
+    "message": "Payment gateway timeout",
+    "stackTrace": "SocketTimeoutException",
+    "metadata": {
+      "orderId": "ord_10293"
+    }
+  }'
 
-**2. Frontend**
-```bash
-cd frontend
-npm install
-cp .env.example .env
-npm run dev
-```
+🏗️ Main Components
+Backend
+REST APIs
+API Key Authentication
+Log Processing
+JPA Specifications
+MySQL Persistence
+WebSocket/STOMP
 
-Open `http://localhost:5173`. Click **Services → Add** to register your first
-client service and grab its API key, then use the generated cURL command to
-send a test log and watch it appear in the live tail instantly.
+Frontend
+Live Log Dashboard
+Search & Filtering
+Service Monitoring
+Log Analytics
+Real-Time Updates
+🐳 Run with Docker
+docker compose up --build -d
 
-## Quick start (Docker Compose)
+Frontend:
 
-```bash
-export DB_HOST=... DB_PORT=... DB_NAME=logtrace DB_USER=... DB_PASSWORD=...
-docker compose up --build
-```
+http://localhost:80
 
-- Backend: `http://localhost:8080`
-- Frontend: `http://localhost:80`
+Backend:
 
-## Architecture notes
+http://localhost:8080
+🎯 Project Goal
 
-- **Multi-tenancy**: each client microservice registers as an `AppService`
-  with its own auto-generated UUID API key; all ingested logs are scoped to
-  that service via a foreign key.
-- **Real-time delivery**: `LogIngestionService` persists each incoming log,
-  then publishes it to both a per-service topic (`/topic/logs/{serviceId}`)
-  and a global topic (`/topic/logs/all`) using Spring's in-memory STOMP broker.
-  The frontend subscribes via SockJS + `@stomp/stompjs`.
-- **Security**: ingestion requests are authenticated with a per-service
-  `X-API-KEY` header, validated by `ApiKeyAuthFilter`. Dashboard read endpoints
-  are open (add JWT/OAuth in front of them for production multi-user access).
-- **Search & filters**: `LogQueryService` builds dynamic JPA Specifications for
-  service, level(s), free-text query (message/stack trace), and date range,
-  with standard Spring Data pagination.
+LogTrace provides a centralized platform to collect, monitor, search, and analyze logs from multiple microservices in real time.
+
+👩‍💻 Author
+
+Harini M
